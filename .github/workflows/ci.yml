@@ -1,10 +1,16 @@
-name: Simple CI
+name: CI-CD
 
 on:
   push:
-  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
+
   test:
     runs-on: ubuntu-latest
 
@@ -22,3 +28,28 @@ jobs:
 
       - name: Run tests
         run: node test.js
+
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
