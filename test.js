@@ -4,7 +4,7 @@ function add(a, b) {
 
 const result = add(2, 3);
 
-if (result === 12) {
+if (result === 5) {
   console.log("Test passed!");
 } else {
   console.log("Test failed!");
